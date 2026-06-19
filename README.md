@@ -1,4 +1,6 @@
 # Playwright SDET E2E Portfolio
+Built using Playwright + TypeScript following Page Object Model and CI/CD best practices.
+
 
 ## Overview
 
