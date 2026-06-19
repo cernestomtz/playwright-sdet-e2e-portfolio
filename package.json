@@ -1,0 +1,39 @@
+{
+  "name": "playwright-sdet-e2e-portfolio",
+  "version": "1.0.0",
+  "description": "Professional SDET portfolio built with Playwright and TypeScript demonstrating end-to-end UI automation, API testing, Page Object Model, Component Object Model, traceability, and CI/CD readiness.",
+  "author": "Carlos Ernesto Martinez",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "playwright test",
+    "test:chrome": "playwright test --project=chromium",
+
+    "test:login": "playwright test tests/login.spec.ts --project=chromium",
+    "test:inventory": "playwright test tests/inventory.spec.ts --project=chromium",
+    "test:cart": "playwright test tests/cart.spec.ts --project=chromium",
+    "test:checkout": "playwright test tests/checkout.spec.ts --project=chromium",
+    "test:logout": "playwright test tests/logout.spec.ts --project=chromium",
+    "test:api": "playwright test tests/api.spec.ts --project=chromium",
+
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+
+    "report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "qa",
+    "sdet",
+    "automation",
+    "testing",
+    "page-object-model",
+    "api-testing",
+    "e2e"
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.2"
+  }
+}
