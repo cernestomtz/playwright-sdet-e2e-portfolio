@@ -11,6 +11,8 @@ test('TC-001 Valid Login - User can access inventory page', async ({ page }) => 
 
   await expect(page).toHaveURL(/.*inventory.html/);
   await expect(page.getByText('Products')).toBeVisible();
+  //Correct the failing
+  //await expect(page.getByText('FAIL')).toBeVisible();
 });
 
 test('TC-002 Invalid Login - User cannot login with invalid credentials', async ({ page }) => {
