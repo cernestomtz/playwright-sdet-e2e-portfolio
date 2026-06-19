@@ -1,68 +1,172 @@
-# Playwright Debugging Guide
+# Playwright SDET Developer Guide
 
-This document contains the most frequently used Playwright commands during development, debugging, execution, and interview demonstrations.
+This document contains the most frequently used commands, workflows, and development practices for this project.
+
+It serves as the primary developer reference for local development, debugging, Git workflow, GitHub workflow, and CI/CD.
 
 ---
 
 # Project Structure
 
-Current test suites:
+```
+PLAYWRIGHT-SDET-E2E-PORTFOLIO
+│
+├── .github/
+│   └── workflows/
+│
+├── components/
+├── docs/
+├── fixtures/
+├── pages/
+├── tests/
+│
+├── README.md
+├── package.json
+└── playwright.config.ts
+```
+
+Folder description
+
+* **components/** → Reusable UI components.
+* **docs/** → Project documentation.
+* **fixtures/** → Centralized test data.
+* **pages/** → Page Object Model classes.
+* **tests/** → UI and API automated tests.
+* **.github/workflows/** → GitHub Actions CI pipeline.
+
+---
+
+# Test Suites
 
 ```
-tests/
-│
-├── login.spec.ts
-├── inventory.spec.ts
-├── cart.spec.ts
-├── checkout.spec.ts
-├── logout.spec.ts
-└── api.spec.ts
+login.spec.ts
+inventory.spec.ts
+cart.spec.ts
+checkout.spec.ts
+logout.spec.ts
+api.spec.ts
 ```
 
 ---
 
-# Run Tests
+# NPM Scripts
 
-## Run Entire Test Suite
+Run complete regression
 
 ```bash
-npx playwright test
+npm test
 ```
 
-Runs every UI and API test.
+Run Login suite
+
+```bash
+npm run test:login
+```
+
+Run Inventory suite
+
+```bash
+npm run test:inventory
+```
+
+Run Cart suite
+
+```bash
+npm run test:cart
+```
+
+Run Checkout suite
+
+```bash
+npm run test:checkout
+```
+
+Run Logout suite
+
+```bash
+npm run test:logout
+```
+
+Run API suite
+
+```bash
+npm run test:api
+```
+
+Run Chromium only
+
+```bash
+npm run test:chrome
+```
+
+Run Firefox only
+
+```bash
+npm run test:firefox
+```
+
+Run WebKit only
+
+```bash
+npm run test:webkit
+```
+
+Run Headed Mode
+
+```bash
+npm run test:headed
+```
+
+Run Debug Mode
+
+```bash
+npm run test:debug
+```
+
+Run Playwright UI Mode
+
+```bash
+npm run test:ui
+```
+
+Open HTML Report
+
+```bash
+npm run report
+```
 
 ---
 
-## Run One Test Suite
+# Running Individual Suites
 
 Login
 
 ```bash
-npx playwright test tests/login.spec.ts
+npx playwright test tests/login.spec.ts --project=chromium
 ```
 
 Inventory
 
 ```bash
-npx playwright test tests/inventory.spec.ts
+npx playwright test tests/inventory.spec.ts --project=chromium
 ```
 
 Cart
 
 ```bash
-npx playwright test tests/cart.spec.ts
+npx playwright test tests/cart.spec.ts --project=chromium
 ```
 
 Checkout
 
 ```bash
-npx playwright test tests/checkout.spec.ts
+npx playwright test tests/checkout.spec.ts --project=chromium
 ```
 
 Logout
 
 ```bash
-npx playwright test tests/logout.spec.ts
+npx playwright test tests/logout.spec.ts --project=chromium
 ```
 
 API
@@ -71,39 +175,13 @@ API
 npx playwright test tests/api.spec.ts --project=chromium
 ```
 
----
-
-## Run One Browser Only
-
-Chromium
+Run a single test
 
 ```bash
-npx playwright test --project=chromium
+npx playwright test -g "TC-001"
 ```
 
-Firefox
-
-```bash
-npx playwright test --project=firefox
-```
-
-WebKit
-
-```bash
-npx playwright test --project=webkit
-```
-
----
-
-## Run One Test By Name
-
-Example:
-
-```bash
-npx playwright test -g "TC-012"
-```
-
-Example:
+Run a single API test
 
 ```bash
 npx playwright test -g "API-001"
@@ -111,307 +189,463 @@ npx playwright test -g "API-001"
 
 ---
 
-# HTML Report
+# Debugging Tools
 
-After executing tests:
+## HTML Report
 
 ```bash
-npx playwright show-report
+npm run report
+```
+
+Used to review:
+
+* Passed tests
+* Failed tests
+* Duration
+* Screenshots
+* Trace Viewer
+
+---
+
+## Playwright Inspector
+
+```bash
+npx playwright test tests/login.spec.ts --project=chromium --debug
 ```
 
 Purpose
 
-- View Passed tests
-- View Failed tests
-- Execution duration
-- Error details
-- Screenshots
-- Open Trace Viewer
+* Step-by-step execution
+* Inspect locators
+* Verify assertions
+* Pause execution
 
 ---
 
-# Playwright UI Mode
+## UI Mode
 
 ```bash
-npx playwright test --ui
+npm run test:ui
 ```
 
 Purpose
 
-- Interactive execution
-- Run individual tests
-- Filter tests
-- Watch mode
-- Open traces
-- Debug visually
-
-Recommended during daily development.
+* Interactive execution
+* Run selected tests
+* Watch mode
+* Visual debugging
 
 ---
 
-# Playwright Inspector
+## Trace Viewer
 
-Run a test step by step.
+Normally opened from the HTML Report.
 
-```bash
-npx playwright test tests/login.spec.ts --debug
-```
-
-Alternative
-
-```bash
-PWDEBUG=1 npx playwright test tests/login.spec.ts
-```
-
-Purpose
-
-- Pause execution
-- Execute line by line
-- Inspect locators
-- Verify assertions
-- Debug failing tests
-
----
-
-# Trace Viewer
-
-If a trace.zip file exists:
+Or manually
 
 ```bash
 npx playwright show-trace trace.zip
 ```
 
-Normally the Trace Viewer is opened directly from the HTML Report.
+Useful for
 
-Purpose
-
-- Replay the entire execution
-- DOM snapshots
-- Screenshots
-- Timeline
-- Console logs
-- Network requests
-- Failed locator analysis
-
-Best tool for investigating failed tests.
+* DOM snapshots
+* Timeline
+* Screenshots
+* Network requests
+* Console logs
+* Locator failures
 
 ---
 
-# Headed Mode
-
-Run tests with a visible browser.
+## Headed Mode
 
 ```bash
-npx playwright test --headed
+npm run test:headed
 ```
 
-Useful when visually validating UI behavior.
+Runs the browser visibly.
+
+Useful for visual validation.
 
 ---
 
-# Code Generator
+## Code Generator
 
 ```bash
 npx playwright codegen https://www.saucedemo.com
 ```
 
-Purpose
+Useful to
 
-- Generate initial Playwright code
-- Discover locators
-- Learn Playwright syntax
+* Discover locators
+* Generate initial Playwright code
+* Learn Playwright syntax
 
-Generated code should normally be refactored before adding it to the framework.
-
----
-
-# Install Browsers
-
-```bash
-npx playwright install
-```
-
----
-
-# Install Dependencies
-
-```bash
-npm install
-```
-
----
-
-# Update Playwright
-
-```bash
-npm install @playwright/test@latest
-```
+Generated code should always be refactored before being added to the framework.
 
 ---
 
 # Typical Debugging Workflow
 
-Step 1
-
-Run the failing suite.
+1. Run the failing suite.
 
 ```bash
-npx playwright test tests/login.spec.ts
+npm run test:login
 ```
 
 ↓
 
-Step 2
-
-Run with a visible browser.
+2. Run headed.
 
 ```bash
-npx playwright test tests/login.spec.ts --headed
+npm run test:headed
 ```
 
 ↓
 
-Step 3
-
-Run using Playwright Inspector.
+3. Run debug.
 
 ```bash
-npx playwright test tests/login.spec.ts --debug
+npm run test:debug
 ```
 
 ↓
 
-Step 4
-
-Open the HTML Report.
+4. Open HTML Report.
 
 ```bash
-npx playwright show-report
+npm run report
 ```
 
 ↓
 
-Step 5
-
-Open the Trace Viewer.
+5. Open Trace Viewer.
 
 ↓
 
-Step 6
-
-Identify the failing locator or assertion.
+6. Identify the failing locator or assertion.
 
 ↓
 
-Step 7
-
-Fix the code.
+7. Fix the issue.
 
 ↓
 
-Step 8
-
-Execute the suite again.
+8. Execute the suite again.
 
 ---
 
-# Commands Used During This Project
+# Git Workflow
 
-Run Login tests
+## Verify current branch
 
 ```bash
-npx playwright test tests/login.spec.ts --project=chromium --debug
-npx playwright test tests/login.spec.ts --project=chromium --headed
+git branch
 ```
 
-Run Inventory tests
+Current branch is marked with (*).
+
+---
+
+## Switch to Main
 
 ```bash
-npx playwright test tests/inventory.spec.ts --project=chromium  --debug
-npx playwright test tests/inventory.spec.ts --project=chromium  --headed
-```
-
-Run Cart tests
-
-```bash
-npx playwright test tests/cart.spec.ts --project=chromium  --debug
-npx playwright test tests/cart.spec.ts --project=chromium  --headed
-```
-
-Run Checkout tests
-
-```bash
-npx playwright test tests/checkout.spec.ts --project=chromium  --debug
-npx playwright test tests/checkout.spec.ts --project=chromium  --headed
-```
-
-Run Logout tests
-
-```bash
-npx playwright test tests/logout.spec.ts --project=chromium --debug
-npx playwright test tests/logout.spec.ts --project=chromium --headed
-```
-
-Run API tests
-
-```bash
-npx playwright test tests/api.spec.ts --project=chromium
-```
-
-Run Complete Regression
-
-```bash
-npx playwright test
-```
-
-Open HTML Report
-
-```bash
-npx playwright show-report
-```
-
-Open UI Mode
-
-```bash
-npx playwright test --ui
-```
-
-Debug Login
-
-```bash
-npx playwright test tests/login.spec.ts --debug
-```
-
-Run Browser Headed
-
-```bash
-npx playwright test --headed
+git checkout main
 ```
 
 ---
 
-# Interview Notes
+## Update Main
 
-During this project the following Playwright tools were used:
+```bash
+git pull origin main
+```
 
-| Tool | Purpose |
-|------|----------|
-| HTML Report | Review execution results and failures |
-| Trace Viewer | Investigate failed executions step by step |
-| Playwright Inspector | Debug tests interactively |
-| UI Mode | Interactive development and execution |
-| Code Generator | Generate initial locators and test skeletons |
+Always update main before starting a new feature.
+
+---
+
+## Create a Feature Branch
+
+```bash
+git checkout -b feature/feature-name
+```
+
+Example
+
+```bash
+git checkout -b feature/add-api-tests
+```
+
+---
+
+## Switch Between Branches
+
+Main
+
+```bash
+git checkout main
+```
+
+Feature
+
+```bash
+git checkout feature/add-api-tests
+```
+
+---
+
+## Check Current Status
+
+```bash
+git status
+```
+
+---
+
+## Stage Files
+
+```bash
+git add .
+```
+
+---
+
+## Commit
+
+```bash
+git commit -m "Meaningful commit message"
+```
+
+Example
+
+```bash
+git commit -m "Add API regression tests"
+```
+
+---
+
+## Push Branch
+
+```bash
+git push -u origin feature/add-api-tests
+```
+
+Subsequent pushes
+
+```bash
+git push
+```
+
+---
+
+# GitHub Workflow
+
+Typical development flow
+
+```
+Update Main
+
+↓
+
+Create Feature Branch
+
+↓
+
+Develop
+
+↓
+
+git add
+
+↓
+
+git commit
+
+↓
+
+git push
+
+↓
+
+Open Pull Request
+
+↓
+
+GitHub Actions executes
+
+↓
+
+Review
+
+↓
+
+Merge
+
+↓
+
+Pull latest Main
+
+↓
+
+Start next feature
+```
+
+---
+
+# Pull Request Checklist
+
+Before opening a PR verify
+
+* Tests pass locally
+* No unnecessary files
+* Documentation updated
+* Meaningful commit message
+* Feature branch pushed
+
+---
+
+# GitHub Actions
+
+The pipeline executes automatically
+
+* On every Push to main
+* On every Pull Request
+
+Pipeline steps
+
+```
+Checkout Repository
+
+↓
+
+Install Dependencies
+
+↓
+
+Install Playwright Browsers
+
+↓
+
+Execute Complete Test Suite
+
+↓
+
+Upload HTML Report Artifact
+```
+
+---
+
+# CI/CD Benefits
+
+The pipeline validates
+
+* UI Tests
+* API Tests
+* Complete Regression
+
+before code reaches the main branch.
+
+---
+
+# Frequently Used Commands
+
+Run Login
+
+```bash
+npm run test:login
+```
+
+Run API
+
+```bash
+npm run test:api
+```
+
+Run Regression
+
+```bash
+npm test
+```
+
+Open Report
+
+```bash
+npm run report
+```
+
+Run Debug
+
+```bash
+npm run test:debug
+```
+
+Run UI Mode
+
+```bash
+npm run test:ui
+```
+
+Run Chromium
+
+```bash
+npm run test:chrome
+```
+
+---
+
+# Interview Talking Points
+
+This project demonstrates
+
+* Requirements Analysis
+* Manual Test Design
+* Traceability Matrix
+* Defect Documentation
+* Page Object Model (POM)
+* Component Object Model
+* Fixture Design
+* UI Automation
+* API Automation
+* Playwright Debugging
+* Git Workflow
+* Pull Requests
+* GitHub Actions
+* CI/CD Pipeline
+* Professional Documentation
+
+---
+
+# Future Improvements
+
+* Branch Protection Rules
+* Scheduled Nightly Regression
+* Allure Reporting
+* API Login Authentication
+* Responsive Testing
+* Environment Configuration
+* Docker Execution
+* Parallel Test Distribution
+* Cross-browser Matrix Execution
+* Slack/Teams Notifications
+* Performance Testing
+* Visual Regression Testing
 
 ---
 
 # Key Takeaways
 
-✔ HTML Report tells **which test failed**
+✔ HTML Report identifies which test failed.
 
-✔ Trace Viewer explains **why it failed**
+✔ Trace Viewer explains why it failed.
 
-✔ Inspector allows **interactive debugging**
+✔ Playwright Inspector enables interactive debugging.
 
-✔ UI Mode accelerates daily development
+✔ UI Mode accelerates local development.
 
-✔ Code Generator speeds up initial test creation but generated code should always be reviewed and refactored
+✔ GitHub Actions automatically validates every Pull Request.
+
+✔ CI/CD helps prevent unstable code from reaching the main branch.
+
+✔ The project follows a professional SDET workflow from requirements analysis through automated testing and continuous integration.
