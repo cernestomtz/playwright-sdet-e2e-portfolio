@@ -336,37 +336,39 @@ npm run report
 
 ---
 
-# Git Workflow
+# Daily Development Workflow
 
-## Verify current branch
+The following workflow represents the development process I follow for every new feature.
+
+---
+
+## Step 1 - Verify Current Branch
+
+Before starting any work, make sure the local repository is up to date.
+
+Check the current branch.
 
 ```bash
 git branch
 ```
 
-Current branch is marked with (*).
-
----
-
-## Switch to Main
+If you are not on **main**, switch to it.
 
 ```bash
 git checkout main
 ```
 
----
-
-## Update Main
+Pull the latest changes from GitHub.
 
 ```bash
 git pull origin main
 ```
 
-Always update main before starting a new feature.
-
 ---
 
-## Create a Feature Branch
+## Step 2 - Create a Feature Branch
+
+Create a dedicated branch for the new feature.
 
 ```bash
 git checkout -b feature/feature-name
@@ -375,64 +377,60 @@ git checkout -b feature/feature-name
 Example
 
 ```bash
-git checkout -b feature/add-api-tests
+git checkout -b feature/api-login
 ```
+
+Develop the feature only inside this branch.
 
 ---
 
-## Switch Between Branches
+## Step 3 - Execute Local Regression
 
-Main
+Before committing, verify that the project still works correctly.
 
-```bash
-git checkout main
-```
-
-Feature
+Run the complete regression.
 
 ```bash
-git checkout feature/add-api-tests
+npm test
 ```
+
+Or execute a specific suite if needed.
+
+```bash
+npm run test:login
+```
+
+Open the HTML Report to review the execution.
+
+```bash
+npm run report
+```
+
+If any test fails, fix the issue before continuing.
 
 ---
 
-## Check Current Status
+## Step 4 - Commit and Push
 
-```bash
-git status
-```
-
----
-
-## Stage Files
+Stage every modified file.
 
 ```bash
 git add .
 ```
 
----
-
-## Commit
+Create a meaningful commit.
 
 ```bash
-git commit -m "Meaningful commit message"
+git commit -m "Add API login implementation"
 ```
 
-Example
+Push the feature branch to GitHub.
 
 ```bash
-git commit -m "Add API regression tests"
+git push -u origin feature/api-login
 ```
 
----
-
-## Push Branch
-
-```bash
-git push -u origin feature/add-api-tests
-```
-
-Subsequent pushes
+After the first push, subsequent pushes only require
 
 ```bash
 git push
@@ -440,11 +438,72 @@ git push
 
 ---
 
-# GitHub Workflow
+## Step 5 - Open a Pull Request
 
-Typical development flow
+Go to the GitHub repository.
 
+Open the recently pushed feature branch.
+
+Click **Compare & Pull Request**.
+
+Create the Pull Request.
+
+Include
+
+* Summary
+* Testing performed
+* Relevant notes
+
+---
+
+## Step 6 - Review the Pull Request
+
+Verify
+
+* Files changed
+* Commit history
+* Pull Request description
+* GitHub Actions execution
+
+Ensure every automated check passes successfully before merging.
+
+---
+
+## Step 7 - Merge the Pull Request
+
+Once the Pull Request has been reviewed and GitHub Actions has completed successfully:
+
+Click
+
+**Merge Pull Request**
+
+Confirm Merge.
+
+Delete the feature branch if it is no longer needed.
+
+---
+
+## Step 8 - Synchronize Local Repository
+
+Return to the main branch.
+
+```bash
+git checkout main
 ```
+
+Download the recently merged changes.
+
+```bash
+git pull origin main
+```
+
+The repository is now synchronized and ready to start the next feature.
+
+---
+
+# Development Lifecycle
+
+```text
 Update Main
 
 ↓
@@ -457,15 +516,15 @@ Develop
 
 ↓
 
-git add
+Execute Local Regression
 
 ↓
 
-git commit
+Commit
 
 ↓
 
-git push
+Push
 
 ↓
 
@@ -473,7 +532,7 @@ Open Pull Request
 
 ↓
 
-GitHub Actions executes
+GitHub Actions
 
 ↓
 
@@ -485,12 +544,13 @@ Merge
 
 ↓
 
-Pull latest Main
+Update Local Main
 
 ↓
 
-Start next feature
+Start Next Feature
 ```
+
 
 ---
 
