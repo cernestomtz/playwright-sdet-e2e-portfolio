@@ -8,12 +8,15 @@ import { products } from '../fixtures/products';
 import { checkoutData } from '../fixtures/checkoutData';
 import { checkoutMessages } from '../fixtures/checkoutMessages';
 import { CheckoutOverviewPage } from '../pages/CheckoutOverviewPage';
+import { setCheckoutMetadata } from '../utils/allureMetadata';
 
 test('TC-012 Checkout With Valid Information - User can continue to overview page', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const inventoryPage = new InventoryPage(page);
   const cartPage = new CartPage(page);
   const checkoutPage = new CheckoutPage(page);
+
+  await setCheckoutMetadata();
 
   await loginPage.goto();
   await loginPage.login(users.standard.username, users.standard.password);
