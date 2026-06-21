@@ -1,19 +1,15 @@
 import { test, expect } from '@playwright/test';
 import { apiData } from '../fixtures/apiData';
+import { setApiUserMetadata } from '../utils/allureMetadata';
 
 test('API-001 GET User - User details are returned successfully', async ({ request }) => {
+  await setApiUserMetadata();
+
   const response = await request.get(`${apiData.baseUrl}/users/${apiData.users.existingUserId}`);
 
   expect(response.status()).toBe(200);
 
-
-  //This is for print the body on the console
-  //const responseBody = await response.json();
-                const responseBody = await response.json();
-
-              console.log(JSON.stringify(responseBody, null, 2));
-
-              //expect(responseBody.data.id).toBe(2);
+  const responseBody = await response.json();
 
   expect(responseBody.id).toBe(apiData.users.existingUserId);
   expect(responseBody.email).toBeTruthy();
