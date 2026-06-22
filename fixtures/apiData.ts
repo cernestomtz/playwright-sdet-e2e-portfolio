@@ -1,5 +1,5 @@
 export const apiData = {
-  baseUrl: 'https://jsonplaceholder.typicode.com',
+  baseUrl: process.env.API_BASE_URL!,
 
   users: {
     existingUserId: 1,
