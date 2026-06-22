@@ -14,6 +14,14 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://www.saucedemo.com
+      STANDARD_USER: standard_user
+      STANDARD_PASSWORD: secret_sauce
+      LOCKED_USER: locked_out_user
+      INVALID_USER: invalid_user
+      INVALID_PASSWORD: invalid_password
+      API_BASE_URL: https://jsonplaceholder.typicode.com
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -24,7 +32,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test
+      run: npx playwright test --project=chromium
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
